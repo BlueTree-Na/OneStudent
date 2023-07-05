@@ -30,6 +30,19 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+
+        .container {
+
+            max-width: 560px;
+
+        }
+        .field-error{
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+
+    </style>
 </head>
 
 <body>
@@ -104,21 +117,46 @@
 <!-- Package Start -->
 <div class="container-xxl py-5">
     <div class="container">
+
         <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
             <h3 class="section-title bg-white text-center text-primary px-3">글 작성</h3>
         </div>
 
+<!--        <div th:if="${#fields.hasGlobalErrors()}">-->
+<!--            <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>-->
+<!--        </div>-->
+
         <form th:action th:object="${boardForm}" action="board/addBoard" method="post">
 
+
+            <div>
+                <label>분야 선택 :</label>
+
+                <select  th:field="*{field}" name="field">
+                    <option value="Front-End" selected="selected">Front-End</option>
+                    <option value="Back-End">Back-End</option>
+                    <option value="DB">DB</option>
+                    <option value="AI">AI</option>
+                    <option value="Algorithm">Algorithm</option>
+                </select>
+
+            </div>
+            <br>
             <div>
                 <label for="boardName">제목</label>
                 <input type="text" id="boardName" th:field="*{title}" name="boardName" class="form-control" placeholder="제목을 입력하세요">
             </div>
+            <div class="field-error" th:errors="*{title}">
+                제목 오류
+            </div>
+            <br>
             <div>
                 <label for="boardContext">내용</label>
-                <textarea type="text" id="boardContext" th:field="*{content}" name="boardContext" class="form-control" placeholder="내용을 입력하세요"></textarea>
+                <textarea type="text" id="boardContext" cols="30" rows="10" style="resize: none;" th:field="*{content}" name="boardContext" class="form-control" placeholder="내용을 입력하세요"></textarea>
             </div>
-
+            <div class="field-error" th:errors="*{content}">
+                내용 오류
+            </div>
             <hr class="my-4">
 
             <div class="row">

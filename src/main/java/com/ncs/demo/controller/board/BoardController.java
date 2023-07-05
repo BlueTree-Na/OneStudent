@@ -8,11 +8,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,6 +65,26 @@ public class BoardController {
         model.addAttribute("sessionForm", sessionForm);
 
         return "board/addBoard";
+    }
+
+    @PostMapping("/board/addBoard")
+    public String addBoard(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false)SessionForm sessionForm ,
+            @Valid @ModelAttribute("boardForm")BoardForm boardForm,
+                           BindingResult bindingResult, Model model){
+
+        // 검증
+        if (bindingResult.hasErrors()){
+            model.addAttribute("boardForm", boardForm);
+            return "board/addBoard";
+        }
+
+        // success logic
+        Date date = new Date();
+        String dateToStr = String.format("%1$tY-%1$tm-%1$td", date);
+
+        Board board = boardRepository.boardSave(new Board(sessionForm.getMemberManageSeq(), boardForm.getTitle(), boardForm.getContent(), dateToStr, sessionForm.getNickName(), boardForm.getField()));
+
+        return "redirect:/myPage";
     }
 
 

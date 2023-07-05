@@ -42,6 +42,7 @@ public class HomeController {
         model.addAttribute("dbField", extractTwo(dbField));
         model.addAttribute("algorithmField", extractTwo(algorithmField));
 
+
         // 로그인 x 사용자
         if (sessionForm == null) {
             return "home/index";
@@ -49,7 +50,6 @@ public class HomeController {
 
         return "home/loggedHome";
     }
-
 
     public List<Board> extractTwo(List<Board> list) {
 

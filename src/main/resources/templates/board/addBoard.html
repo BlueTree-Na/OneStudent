@@ -108,15 +108,15 @@
             <h3 class="section-title bg-white text-center text-primary px-3">글 작성</h3>
         </div>
 
-        <form th:action action="board/addBoard" method="post">
+        <form th:action th:object="${boardForm}" action="board/addBoard" method="post">
 
             <div>
                 <label for="boardName">제목</label>
-                <input type="text" id="boardName" th:field="*{boardName}" name="boardName" class="form-control" placeholder="제목을 입력하세요">
+                <input type="text" id="boardName" th:field="*{title}" name="boardName" class="form-control" placeholder="제목을 입력하세요">
             </div>
             <div>
                 <label for="boardContext">내용</label>
-                <textarea type="text" id="boardContext" th:field="*{boardContext}" name="boardContext" class="form-control" placeholder="내용을 입력하세요"></textarea>
+                <textarea type="text" id="boardContext" th:field="*{content}" name="boardContext" class="form-control" placeholder="내용을 입력하세요"></textarea>
             </div>
 
             <hr class="my-4">
@@ -124,6 +124,7 @@
             <div class="row">
                 <div class="col">
                     <button class="w-100 btn btn-primary btn-lg" type="submit">게시</button>
+                    <br><br>
                     <button class="w-100 btn btn-secondary btn-lg" th:onclick="|location.href='@{/}'|" onclick="location.href='/board'" type="button">취소
                     </button>
                 </div>

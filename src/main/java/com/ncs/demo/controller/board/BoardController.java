@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
@@ -57,10 +58,15 @@ public class BoardController {
     }
 
     // 앞으로 해야할 게시글 추가, 수정, 삭제
-    //    @GetMapping("/addBoard")
-//    public String addBoard(Model model){
-//        return "board/addBoard";
-//    }
+    @GetMapping("/board/addBoard")
+    public String addBoard(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false) SessionForm sessionForm,
+                           @ModelAttribute("boardForm")BoardForm boardForm, Model model) {
+
+        model.addAttribute("sessionForm", sessionForm);
+
+        return "board/addBoard";
+    }
+
 
 //    @GetMapping("/editBoard")
 //    public String editBoard(Model model){

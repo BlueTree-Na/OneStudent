@@ -122,8 +122,16 @@
 
             <div class="row">
                 <div class="col">
-                    <button class="w-100 btn btn-secondary btn-lg" th:onclick="|location.href='@{/}'|" onclick="location.href='/board'" type="button">돌아가기
+                    <button class="w-100 btn btn-primary btn-lg" th:onclick="|location.href='@{/}'|" onclick="location.href='/board'" type="button">돌아가기
                     </button>
+                </div>
+                <div class="col" th:if="${sessionForm.getMemberManageSeq()==board.getWriterManageSeq()}">
+                    <a class="w-100 btn btn-primary btn-lg" th:href="@{/edit/{manageSeq}(manageSeq=${board.getBoardManageSeq()})}" onclick="location.href='/board/editBoard'" type="button">수정하기
+                    </a>
+                </div>
+                <div class="col" th:if="${sessionForm.getMemberManageSeq()==board.getWriterManageSeq()}">
+                    <a class="w-100 btn btn-secondary btn-lg" th:href="@{/remove/{manageSeq}(manageSeq=${board.getBoardManageSeq()})}" onclick="location.href='/board'" type="button">삭제하기
+                    </a>
                 </div>
             </div>
 

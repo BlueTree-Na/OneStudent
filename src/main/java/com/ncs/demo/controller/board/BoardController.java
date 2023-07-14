@@ -37,8 +37,10 @@ public class BoardController {
 
         model.addAttribute("sessionForm", sessionForm);
 
+
         Board findBoard = board.get();
         model.addAttribute("board", findBoard);
+
 
         return "board/detailBoard";
     }
@@ -46,7 +48,7 @@ public class BoardController {
     @GetMapping("/board/field/{field}")
     public String fieldByBoard(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false) SessionForm sessionForm,
                                @PathVariable String field,
-                               Model model){
+                               Model model) {
 
         List<Board> findField = boardRepository.findByField(field);
 
@@ -60,7 +62,7 @@ public class BoardController {
     // 앞으로 해야할 게시글 추가, 수정, 삭제
     @GetMapping("/board/addBoard")
     public String addBoard(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false) SessionForm sessionForm,
-                           @ModelAttribute("boardForm")BoardForm boardForm, Model model) {
+                           @ModelAttribute("boardForm") BoardForm boardForm, Model model) {
 
         model.addAttribute("sessionForm", sessionForm);
 
@@ -68,12 +70,12 @@ public class BoardController {
     }
 
     @PostMapping("/board/addBoard")
-    public String addBoard(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false)SessionForm sessionForm ,
-            @Valid @ModelAttribute("boardForm")BoardForm boardForm,
-                           BindingResult bindingResult, Model model){
+    public String addBoard(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false) SessionForm sessionForm,
+                           @Valid @ModelAttribute("boardForm") BoardForm boardForm,
+                           BindingResult bindingResult, Model model) {
 
         // 검증
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             model.addAttribute("boardForm", boardForm);
             return "board/addBoard";
         }
@@ -87,14 +89,53 @@ public class BoardController {
         return "redirect:/myPage";
     }
 
+    @GetMapping("/editBoard")
+    public String editBoard(Model model){
+        return "board/editBoard";
+    }
 
-//    @GetMapping("/editBoard")
-//    public String editBoard(Model model){
-//        return "board/editBoard";
-//    }
+    @PostMapping("/editBoard/{boardManageSeq}")
+    public String editBoard(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false)SessionForm sessionForm,
+                            @Valid @ModelAttribute("boardForm")BoardForm boardForm,
+                            @PathVariable Long boardManageSeq){
+
+//        Long memberManageSeq = sessionForm.getMemberManageSeq();
+
+        Optional<Board> updateBoard = boardRepository.findByBoardManageSeq(boardManageSeq);
+        if (updateBoard.isEmpty()){
+            return "redirect:/";
+        }
+
+        Board board = updateBoard.get();
+
+        boardRepository.boardUpdateByBoardManageSeq(boardManageSeq, );
+
+
+        return "board/editBoard";
+    }
+
+    @GetMapping("/remove/{boardManageSeq}")
+    public String remove(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false) SessionForm sessionForm,
+            @PathVariable Long boardManageSeq) {
+
+        Long memberManageSeq = sessionForm.getMemberManageSeq();
+        Optional<Board> byBoardManageSeq = boardRepository.findByBoardManageSeq(boardManageSeq);
+
+        if (byBoardManageSeq.isEmpty()){
+            return "redirect:/";
+        }
+
+        Board board = byBoardManageSeq.get();
+
+        if (board.getWriterManageSeq() == memberManageSeq){
+            boardRepository.removeBoardByBoardManage(boardManageSeq);
+        }
+        return "redirect:/";
+    }
+
 
     public List<Board> extractAll(List<Board> list) {
         return list;
     }
-
 }
+

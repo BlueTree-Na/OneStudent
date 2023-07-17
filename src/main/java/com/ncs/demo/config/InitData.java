@@ -45,9 +45,9 @@ public class InitData {
         Board board8 = new Board(member1.getMemberManageSeq(), "MySQL2", "1234", "2023-06-14", member1.getNickName(), "DB");
         boardRepository.boardSave(board8);
 
-        Board board9 = new Board(member1.getMemberManageSeq(), "정렬1", "1234", "2023-06-14", member1.getNickName(), "ALGORITHM");
+        Board board9 = new Board(member1.getMemberManageSeq(), "정렬1", "1234", "2023-06-14", member1.getNickName(), "Algorithm");
         boardRepository.boardSave(board9);
-        Board board10 = new Board(member1.getMemberManageSeq(), "정렬2", "1234", "2023-06-14", member1.getNickName(), "ALGORITHM");
+        Board board10 = new Board(member1.getMemberManageSeq(), "정렬2", "1234", "2023-06-14", member1.getNickName(), "Algorithm");
         boardRepository.boardSave(board10);
 
     }

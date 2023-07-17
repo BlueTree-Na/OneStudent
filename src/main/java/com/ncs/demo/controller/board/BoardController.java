@@ -89,12 +89,25 @@ public class BoardController {
         return "redirect:/myPage";
     }
 
-    @GetMapping("/editBoard")
-    public String editBoard(Model model){
+    @GetMapping("/edit/{boardManageSeq}")
+    public String editBoard(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false)SessionForm sessionForm,
+                            @PathVariable Long boardManageSeq,
+                            Model model){
+        model.addAttribute("sessionForm", sessionForm);
+        Optional<Board> byBoardManageSeq = boardRepository.findByBoardManageSeq(boardManageSeq);
+
+        if (byBoardManageSeq.isEmpty()){
+            return "redirect:/";
+        }
+
+        Board board = byBoardManageSeq.get();
+        model.addAttribute("board", board);
+        model.addAttribute("boardForm", new BoardForm(board.getField(), board.getTitle(), board.getContent()));
+
         return "board/editBoard";
     }
 
-    @PostMapping("/editBoard/{boardManageSeq}")
+    @PostMapping("/edit/{boardManageSeq}")
     public String editBoard(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false)SessionForm sessionForm,
                             @Valid @ModelAttribute("boardForm")BoardForm boardForm,
                             @PathVariable Long boardManageSeq){
@@ -107,8 +120,10 @@ public class BoardController {
         }
 
         Board board = updateBoard.get();
+        board.setBoardManageSeq(boardManageSeq);
+//        board.
 
-        boardRepository.boardUpdateByBoardManageSeq(boardManageSeq, );
+//        boardRepository.boardUpdateByBoardManageSeq(boardManageSeq, board);
 
 
         return "board/editBoard";

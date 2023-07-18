@@ -111,11 +111,11 @@
         <form action="/detailBoard" method="post">
             <div>
                 <label for="boardName">제목</label>
-                <input th:value="${board.title}" type="text" id="boardName" name="boardName" class="form-control" placeholder="MVC 공부중..!" readonly>
+                <input th:value="${board.title}" type="text" id="boardName" name="boardName" class="form-control" placeholder="제목을 입력하세요" readonly>
             </div>
             <div>
                 <label for="board">내용</label>
-                <textarea th:text="${board.content}" type="text" id="board" cols="30" rows="10" style="resize: none;" name="board" class="form-control" value="Model View Controller" readonly></textarea>
+                <textarea th:text="${board.content}" type="text" id="board" cols="30" rows="10" style="resize: none;" name="board" class="form-control" value="내용을 입력하세요" readonly></textarea>
             </div>
 
             <hr class="my-4">

@@ -37,7 +37,6 @@ public class BoardController {
 
         model.addAttribute("sessionForm", sessionForm);
 
-
         Board findBoard = board.get();
         model.addAttribute("board", findBoard);
 
@@ -59,10 +58,10 @@ public class BoardController {
         return "board/board";
     }
 
-    // 앞으로 해야할 게시글 추가, 수정, 삭제
     @GetMapping("/board/addBoard")
     public String addBoard(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false) SessionForm sessionForm,
-                           @ModelAttribute("boardForm") BoardForm boardForm, Model model) {
+                           @ModelAttribute("boardForm") BoardForm boardForm,
+                           Model model) {
 
         model.addAttribute("sessionForm", sessionForm);
 
@@ -110,23 +109,34 @@ public class BoardController {
     @PostMapping("/edit/{boardManageSeq}")
     public String editBoard(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false)SessionForm sessionForm,
                             @Valid @ModelAttribute("boardForm")BoardForm boardForm,
-                            @PathVariable Long boardManageSeq){
+                            @PathVariable Long boardManageSeq,
+                            BindingResult bindingResult,
+                            Model model){
 
-//        Long memberManageSeq = sessionForm.getMemberManageSeq();
+        model.addAttribute("sessionForm", sessionForm);
+        Optional<Board> byBoardManageSeq = boardRepository.findByBoardManageSeq(boardManageSeq);
 
-        Optional<Board> updateBoard = boardRepository.findByBoardManageSeq(boardManageSeq);
-        if (updateBoard.isEmpty()){
+        if (byBoardManageSeq.isEmpty()){
             return "redirect:/";
         }
+        Board board = byBoardManageSeq.get();
+        if (bindingResult.hasErrors()){
+            model.addAttribute("board", board);
+            boardForm.setField(board.getField());
+            boardForm.setTitle(board.getTitle());
+            boardForm.setContent(board.getContent());
+            model.addAttribute("boardForm", boardForm);
+            return "board/editBoard";
+        }
 
-        Board board = updateBoard.get();
-        board.setBoardManageSeq(boardManageSeq);
-//        board.
+        Date date = new Date();
+        String dateToStr = String.format("%1$tY-%1$tm-%1$td", date);
 
-//        boardRepository.boardUpdateByBoardManageSeq(boardManageSeq, board);
+        Board updatedBoard = new Board(sessionForm.getMemberManageSeq(), boardForm.getTitle(), boardForm.getContent(), dateToStr, sessionForm.getNickName(), boardForm.getField());
 
+        boardRepository.boardUpdateByBoardManageSeq(boardManageSeq, updatedBoard);
 
-        return "board/editBoard";
+        return "redirect:/myPage";
     }
 
     @GetMapping("/remove/{boardManageSeq}")

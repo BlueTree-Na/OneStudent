@@ -31,7 +31,7 @@ public class HomeController {
         List<Board> frontField = boardRepository.findByField("Front-End");
         List<Board> aiField = boardRepository.findByField("AI");
         List<Board> dbField = boardRepository.findByField("DB");
-        List<Board> algorithmField = boardRepository.findByField("ALGORITHM");
+        List<Board> algorithmField = boardRepository.findByField("Algorithm");
 
 
 //        frontField.get(1).getWriterNickname()

@@ -14,7 +14,7 @@ public interface BoardRepository {
     Optional<Board> findByBoardManageSeq(Long boardManageSeq);
 
     // WriterManageSeq를 통해 board 찾기 -> 작성자 ( 마이페이지에서 활용 ) (R)
-    Optional<Board> findByWriterManageSeq(Long writerManageSeq);
+    List<Board> findByWriterManageSeq(Long writerManageSeq);
 
     // 모든 board 조회 (R)
     List<Board> findAllBoard();

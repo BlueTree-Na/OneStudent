@@ -25,10 +25,7 @@ public class MyPageController {
     public String viewMyPage(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false) SessionForm sessionForm,
                          Model model){
 
-        List<Board> boardAll = boardRepository.findAllBoard().stream()
-                .filter(m -> m.getWriterNickname().equals(sessionForm.getNickName()))
-                .collect(Collectors.toList());
-
+        List<Board> boardAll = boardRepository.findByWriterManageSeq(sessionForm.getMemberManageSeq());
 
         model.addAttribute("boardAll", boardAll);
         model.addAttribute("sessionForm", sessionForm);

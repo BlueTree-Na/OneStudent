@@ -42,6 +42,13 @@ public class MemoryMemberRepository implements MemberRepository{
     }
 
     @Override
+    public Optional<Member> findByNickName(String nickName) {
+        return findAllMember().stream()
+                .filter(m -> m.getNickName().equals(nickName))
+                .findFirst();
+    }
+
+    @Override
     public void clearStore() {
         memberStore.clear();
     }

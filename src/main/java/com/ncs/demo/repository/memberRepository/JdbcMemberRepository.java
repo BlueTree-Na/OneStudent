@@ -2,7 +2,6 @@ package com.ncs.demo.repository.memberRepository;
 
 import com.ncs.demo.domain.member.Member;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
+
 @Primary
 @Repository
 @RequiredArgsConstructor
@@ -124,6 +123,40 @@ public class JdbcMemberRepository implements MemberRepository{
             throw new IllegalStateException(e);
         } finally {
             close(conn,pstmt,rs);
+        }
+    }
+
+    @Override
+    public Optional<Member> findByNickName(String nickName) {
+
+        String sql = "select * from Member_TB where nickName = ?";
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try{
+
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, nickName);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()){
+                Member member = new Member(rs.getString("id"),
+                        rs.getString("pw"),
+                        rs.getString("name"),
+                        rs.getString("nickName"));
+                member.setMemberManageSeq(rs.getLong("memberManageSeq"));
+                return Optional.of(member);
+            }
+            return Optional.empty();
+
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
         }
     }
 

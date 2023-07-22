@@ -19,6 +19,9 @@ public interface MemberRepository {
     // 모든 회원 찾기
     List<Member> findAllMember();
 
+    // 별명으로 회원 찾기
+    Optional<Member> findByNickName(String nickName);
+
     // 메모리 리셋
     default void clearStore(){};
 

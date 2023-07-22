@@ -44,7 +44,7 @@ public class JdbcBoardRepository implements BoardRepository {
             rs = pstmt.getGeneratedKeys();
 
             if (rs.next()) {
-                board.setBoardManageSeq(rs.getLong("boardManageSeq"));
+                board.setBoardManageSeq(rs.getLong(1));
             } else {
                 throw new SQLException("board 조회 실패");
             }
@@ -207,7 +207,7 @@ public class JdbcBoardRepository implements BoardRepository {
     @Override
     public Board boardUpdateByBoardManageSeq(Long boardManageSeq, Board updatedBoard) {
 
-        String sql = "update Member_TB set field = ?, title = ?, content = ?, date = ? where boardManageSeq = ?";
+        String sql = "update Board_TB set field = ?, title = ?, content = ?, date = ? where boardManageSeq = ?";
 
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -223,25 +223,27 @@ public class JdbcBoardRepository implements BoardRepository {
             pstmt.setString(4, updatedBoard.getDate());
             pstmt.setLong(5, boardManageSeq);
 
-            rs = pstmt.executeQuery();
+            pstmt.executeUpdate();
 
-            if (rs.next()) {
-                Board board = new Board(rs.getLong("writerManageSeq"),
-                        rs.getString("title"),
-                        rs.getString("content"),
-                        rs.getString("date"),
-                        rs.getString("nickName"),
-                        rs.getString("field"));
-                board.setBoardManageSeq(rs.getLong("boardManageSeq"));
-                return board;
-            }
+//            if (rs.next()) {
+//                Board board = new Board(rs.getLong("writerManageSeq"),
+//                        rs.getString("title"),
+//                        rs.getString("content"),
+//                        rs.getString("date"),
+//                        rs.getString("nickName"),
+//                        rs.getString("field"));
+//                board.setBoardManageSeq(rs.getLong("boardManageSeq"));
+//                return board;
+//            }
+
+            updatedBoard.setBoardManageSeq(boardManageSeq);
+            return updatedBoard;
 
         } catch (Exception e) {
             throw new IllegalStateException(e);
         } finally {
             close(conn, pstmt, rs);
         }
-        return null;
     }
 
     @Override
@@ -258,8 +260,9 @@ public class JdbcBoardRepository implements BoardRepository {
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
             pstmt.setLong(1, boardManageSeq);
-
-            rs = pstmt.executeQuery();
+            
+            // delete는 rs 안받는다
+            pstmt.executeUpdate();
 
         } catch (Exception e) {
             throw new IllegalStateException(e);

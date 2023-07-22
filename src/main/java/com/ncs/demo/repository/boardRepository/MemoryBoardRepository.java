@@ -28,10 +28,10 @@ public class MemoryBoardRepository implements BoardRepository{
     }
 
     @Override
-    public Optional<Board> findByWriterManageSeq(Long writerManageSeq) {
+    public List<Board> findByWriterManageSeq(Long writerManageSeq) {
         return findAllBoard().stream()
                 .filter(b -> b.getWriterManageSeq().equals(writerManageSeq))
-                .findFirst();
+                .collect(Collectors.toList());
     }
 
     @Override

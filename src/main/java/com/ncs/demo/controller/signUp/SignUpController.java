@@ -37,9 +37,7 @@ public class SignUpController {
         }
 
         // 중복 검사
-        Optional<Member> findNickName = memberRepository.findAllMember().stream()
-                .filter(m -> m.getNickName().equals(signUpForm.getNickName()))
-                .findFirst();
+        Optional<Member> findNickName = memberRepository.findByNickName(signUpForm.getNickName());
         if (findNickName.isPresent()){
             log.info("signUp log : 이미 존재하는 nickName:{}", signUpForm.getNickName());
             bindingResult.addError(new FieldError("signUpForm", "nickName", "nickName이 이미 존재합니다."));

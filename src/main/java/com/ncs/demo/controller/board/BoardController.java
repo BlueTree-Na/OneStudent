@@ -124,11 +124,6 @@ public class BoardController {
 
         Board board = byBoardManageSeq.get();
 
-        log.info("{}", board.getField());
-        log.info("{}", board.getTitle());
-        log.info("{}", board.getContent());
-        log.info("{}", boardForm);
-
         if (bindingResult.hasErrors()){
             boardForm.setField(board.getField());
             boardForm.setTitle(board.getTitle());

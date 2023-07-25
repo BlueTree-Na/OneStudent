@@ -131,47 +131,59 @@
 
         <form th:action th:object="${boardForm}" action="board/editBoard" method="post">
             <div>
-                <label>분야 선택 :</label>
-
-                <select th:field="*{field}" name="field">
-                    <option value="Front-End" th:selected="${board.getField()}=='Front-End'">Front-End</option>
-                    <option value="Back-End" th:selected="${board.getField()}=='Back-End'">Back-End</option>
-                    <option value="DB" th:selected="${board.getField()}=='DB'">DB</option>
-                    <option value="AI" th:selected="${board.getField()}=='AI'">AI</option>
-                    <option value="Algorithm" th:selected="${board.getField()}=='Algorithm'">Algorithm</option>
-                </select>
-
-            </div>
-            <div>
-                <label for="boardName">제목</label>
-                <input type="text" id="boardName" th:field="*{title}"  name="boardName" class="form-control"
-                       placeholder="제목을 입력하세요">
-            </div>
-            <div class="field-error" th:errors="*{title}">
-                제목 오류
-            </div>
-            <div>
-                <label for="boardContext">내용</label>
-                <textarea type="text" id="boardContext" cols="30" rows="10" style="resize: none;" th:field="*{content}"
-                           name="boardContext" class="form-control" placeholder="내용을 입력하세요"></textarea>
-            </div>
-            <div class="field-error" th:errors="*{content}">
-                내용 오류
-            </div>
-            <hr class="my-4">
-
-            <div class="row">
-                <div class="col">
-                    <button class="w-100 btn btn-primary btn-lg" th:onclick="|location.href='@{/}'|"
-                            onclick="location.href='/board'" type="button">돌아가기
-                    </button>
+                <div th:if="${#fields.hasGlobalErrors()}">
+                    <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
                 </div>
-                <div class="col">
-                    <button class="w-100 btn btn-secondary btn-lg" type="submit">수정하기
-                    </button>
+
+                <div>
+                    <label>분야 선택 :</label>
+
+                    <select th:field="*{field}" name="field">
+                        <option value="Front-End" th:selected="${board.getField()}=='Front-End'">Front-End</option>
+                        <option value="Back-End" th:selected="${board.getField()}=='Back-End'">Back-End</option>
+                        <option value="DB" th:selected="${board.getField()}=='DB'">DB</option>
+                        <option value="AI" th:selected="${board.getField()}=='AI'">AI</option>
+                        <option value="Algorithm" th:selected="${board.getField()}=='Algorithm'">Algorithm</option>
+                    </select>
+
+                </div>
+
+                <div class="col-12">
+                    <label for="boardName">제목</label>
+                    <input type="text" class="form-control" name="boardName" th:field="*{title}" id="boardName"
+                           placeholder="제목을 입력하세요"
+                           th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{title}">
+                        제목 오류
+                    </div>
+                </div>
+                <br>
+
+                <div>
+                    <label for="boardContext">내용</label>
+                    <textarea type="text" id="boardContext" cols="30" rows="10" style="resize: none;"
+                              th:field="*{content}"
+                              name="boardContext" class="form-control" placeholder="내용을 입력하세요"></textarea>
+                </div>
+                <div class="field-error" th:errors="*{content}">
+                    내용 오류
+                </div>
+                <br>
+
+                <hr class="my-4">
+
+                <div class="row">
+                    <div class="col">
+                        <button class="w-100 btn btn-primary btn-lg" th:onclick="|location.href='@{/}'|"
+                                onclick="location.href='/board'" type="button">돌아가기
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button class="w-100 btn btn-secondary btn-lg" type="submit">수정하기
+                        </button>
+                    </div>
                 </div>
             </div>
-
         </form>
     </div>
 </div>

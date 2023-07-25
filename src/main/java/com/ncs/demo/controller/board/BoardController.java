@@ -92,40 +92,48 @@ public class BoardController {
     public String editBoard(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false)SessionForm sessionForm,
                             @PathVariable Long boardManageSeq,
                             Model model){
+
         model.addAttribute("sessionForm", sessionForm);
         Optional<Board> byBoardManageSeq = boardRepository.findByBoardManageSeq(boardManageSeq);
-
         if (byBoardManageSeq.isEmpty()){
             return "redirect:/";
         }
 
         Board board = byBoardManageSeq.get();
+
         model.addAttribute("board", board);
         model.addAttribute("boardForm", new BoardForm(board.getField(), board.getTitle(), board.getContent()));
 
         return "board/editBoard";
     }
 
+    // BindingResult객체는 반드시 @ModelAttribute 바로 옆에 작성한다!!
+    // 안하면 BindingResult 가 동작 안해서 매핑 자체 오류 발생
     @PostMapping("/edit/{boardManageSeq}")
     public String editBoard(@SessionAttribute(name = SessionConst.LOGIN_SESSION_KEY, required = false)SessionForm sessionForm,
                             @Valid @ModelAttribute("boardForm")BoardForm boardForm,
-                            @PathVariable Long boardManageSeq,
                             BindingResult bindingResult,
+                            @PathVariable Long boardManageSeq,
                             Model model){
 
         model.addAttribute("sessionForm", sessionForm);
         Optional<Board> byBoardManageSeq = boardRepository.findByBoardManageSeq(boardManageSeq);
-
         if (byBoardManageSeq.isEmpty()){
             return "redirect:/";
         }
+
         Board board = byBoardManageSeq.get();
+
+        log.info("{}", board.getField());
+        log.info("{}", board.getTitle());
+        log.info("{}", board.getContent());
+        log.info("{}", boardForm);
+
         if (bindingResult.hasErrors()){
-            model.addAttribute("board", board);
             boardForm.setField(board.getField());
             boardForm.setTitle(board.getTitle());
             boardForm.setContent(board.getContent());
-            model.addAttribute("boardForm", boardForm);
+            model.addAttribute("board", board);
             return "board/editBoard";
         }
 
